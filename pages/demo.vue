@@ -1,7 +1,7 @@
 <template>
   <!--
 Sections animate in and out on scroll. Scroll up or down and the sections will wrap around after hitting the start or end. Uses GSAP for the animations.
--->
+ -->
   <div>
     <header>
       <div>Animated Sections</div>

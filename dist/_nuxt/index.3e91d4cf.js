@@ -1,0 +1,1 @@
+import{g as e,S as a}from"./ScrollTrigger.df000766.js";import{a as t,b as r,o as s}from"./entry.2aedbafc.js";e.registerPlugin(a);const n={data:()=>({})};function o(c,i,_,l,p,d){return s(),r("div",null,"Esta será la pagina chida")}const f=t(n,[["render",o]]);export{f as default};

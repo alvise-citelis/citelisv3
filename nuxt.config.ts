@@ -2,6 +2,9 @@
 
 export default defineNuxtConfig({
   target: "status",
+  router: {
+    base: "/citelisv3/",
+  },
   devServer: {
     port: 3333,
   },

@@ -2,7 +2,7 @@
   <!--
 Sections animate in and out on scroll. Scroll up or down and the sections will wrap around after hitting the start or end. Uses GSAP for the animations.
  -->
-  <div>
+  <div class="demo">
     <header>
       <div>Animated Sections</div>
       <div>Made By Brian</div>
@@ -197,7 +197,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap");
 

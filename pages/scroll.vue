@@ -43,7 +43,6 @@ export default {
         end: "bottom -50%",
         toggleClass: "active",
         ease: "power2",
-        markers: true,
       },
     });
     gsap.to(".hero__image", {

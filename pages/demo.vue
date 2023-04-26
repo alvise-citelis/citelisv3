@@ -7,6 +7,14 @@ Sections animate in and out on scroll. Scroll up or down and the sections will w
       <div>Animated Sections</div>
       <div>Made By Brian</div>
     </header>
+    <div class="dots">
+      <ul>
+        <li
+          v-for="(i, index) in sectionss"
+          :class="index == next ? 'active' : ''"
+        />
+      </ul>
+    </div>
     <section v-for="section in sectionss" :class="section.class">
       <div class="outer">
         <div class="inner">
@@ -25,6 +33,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export default {
+  name: "DemoPro",
   data() {
     return {
       sectionss: [
@@ -34,23 +43,19 @@ export default {
         { class: "fourth", text: "SAnimation platformn" },
         { class: "fifth", text: "Keep scrolling" },
       ],
+      current: null,
+      next: 0,
     };
   },
   mounted() {
-    document.addEventListener("wheel", handleWheel);
-    document.addEventListener("touchstart", handleTouchStart);
-    document.addEventListener("touchmove", handleTouchMove);
-    document.addEventListener("touchend", handleTouchEnd);
-
     const sections = document.querySelectorAll("section");
     const images = document.querySelectorAll(".bg");
     const headings = gsap.utils.toArray(".section-heading");
     const outerWrappers = gsap.utils.toArray(".outer");
     const innerWrappers = gsap.utils.toArray(".inner");
+
     let listening = false,
-      direction = "down",
-      current,
-      next = 0;
+      direction = "down";
 
     const touch = {
       startX: 0,
@@ -72,25 +77,26 @@ export default {
         linesClass: "clip-text",
       }); */
     });
-    function revealSectionHeading() {
-      return gsap.to(splitHeadings[next], {
+    const revealSectionHeading = () => {
+      return gsap.to(splitHeadings[this.next], {
         autoAlpha: 1,
         yPercent: 0,
         duration: 1,
         ease: "power2",
       });
-    }
+    };
 
     gsap.set(outerWrappers, { yPercent: 100 });
     gsap.set(innerWrappers, { yPercent: -100 });
 
     // Slides a section in on scroll down
-    function slideIn() {
+    const slideIn = () => {
       // The first time this function runs, current is undefined
-      if (current !== undefined) gsap.set(sections[current], { zIndex: 0 });
+      if (this.current !== undefined)
+        gsap.set(sections[this.current], { zIndex: 0 });
 
-      gsap.set(sections[next], { autoAlpha: 1, zIndex: 1 });
-      gsap.set(images[next], { yPercent: 0 });
+      gsap.set(sections[this.next], { autoAlpha: 1, zIndex: 1 });
+      gsap.set(images[this.next], { yPercent: 0 });
 
       const tl = gsap
         .timeline({
@@ -98,16 +104,20 @@ export default {
           defaults: tlDefaults,
           onComplete: () => {
             listening = true;
-            current = next;
+            this.current = this.next;
           },
         })
-        .to([outerWrappers[next], innerWrappers[next]], { yPercent: 0 }, 0)
-        .from(images[next], { yPercent: 15 }, 0)
+        .to(
+          [outerWrappers[this.next], innerWrappers[this.next]],
+          { yPercent: 0 },
+          0
+        )
+        .from(images[this.next], { yPercent: 15 }, 0)
         .add(revealSectionHeading(), 0);
 
-      if (current !== undefined) {
+      if (this.current !== undefined) {
         tl.add(
-          gsap.to(images[current], {
+          gsap.to(images[this.current], {
             yPercent: -15,
             ...tlDefaults,
           }),
@@ -115,72 +125,84 @@ export default {
         ).add(
           gsap
             .timeline()
-            .set(outerWrappers[current], { yPercent: 100 })
-            .set(innerWrappers[current], { yPercent: -100 })
-            .set(images[current], { yPercent: 0 })
-            .set(sections[current], { autoAlpha: 0 })
+            .set(outerWrappers[this.current], { yPercent: 100 })
+            .set(innerWrappers[this.current], { yPercent: -100 })
+            .set(images[this.current], { yPercent: 0 })
+            .set(sections[this.current], { autoAlpha: 0 })
         );
       }
 
       tl.play(0);
-    }
+    };
 
     // Slides a section out on scroll up
-    function slideOut() {
-      gsap.set(sections[current], { zIndex: 1 });
-      gsap.set(sections[next], { autoAlpha: 1, zIndex: 0 });
-      gsap.set([outerWrappers[next], innerWrappers[next]], { yPercent: 0 });
-      gsap.set(images[next], { yPercent: 0 });
+    const slideOut = () => {
+      gsap.set(sections[this.current], { zIndex: 1 });
+      gsap.set(sections[this.next], { autoAlpha: 1, zIndex: 0 });
+      gsap.set([outerWrappers[this.next], innerWrappers[this.next]], {
+        yPercent: 0,
+      });
+      gsap.set(images[this.next], { yPercent: 0 });
 
       gsap
         .timeline({
           defaults: tlDefaults,
           onComplete: () => {
             listening = true;
-            current = next;
+            this.current = this.next;
           },
         })
-        .to(outerWrappers[current], { yPercent: 100 }, 0)
-        .to(innerWrappers[current], { yPercent: -100 }, 0)
-        .to(images[current], { yPercent: 15 }, 0)
-        .from(images[next], { yPercent: -15 }, 0)
+        .to(outerWrappers[this.current], { yPercent: 100 }, 0)
+        .to(innerWrappers[this.current], { yPercent: -100 }, 0)
+        .to(images[this.current], { yPercent: 15 }, 0)
+        .from(images[this.next], { yPercent: -15 }, 0)
         .add(revealSectionHeading(), ">-1")
-        .set(images[current], { yPercent: 0 });
-    }
+        .set(images[this.current], { yPercent: 0 });
+    };
 
-    function handleDirection() {
+    const handleDirection = () => {
       listening = false;
 
       if (direction === "down") {
-        next = current + 1;
-        if (next >= sections.length) next = 0;
+        if (this.current >= sections.length - 1) {
+          listening = true;
+          console.log("no more");
+          return;
+        }
+        this.next = this.current + 1;
+        if (this.next >= sections.length) this.next = 0;
         slideIn();
       }
 
       if (direction === "up") {
-        next = current - 1;
-        if (next < 0) next = sections.length - 1;
+        if (this.current <= 0) {
+          listening = true;
+          console.log("no more");
+          return;
+        }
+        this.next = this.current - 1;
+        if (this.next < 0) this.next = sections.length - 1;
         slideOut();
       }
-    }
+    };
 
-    function handleWheel(e) {
+    const handleWheel = (e) => {
       if (!listening) return;
       direction = e.wheelDeltaY < 0 ? "down" : "up";
       handleDirection();
-    }
+    };
 
-    function handleTouchStart(e) {
+    const handleTouchStart = (e) => {
       if (!listening) return;
       const t = e.changedTouches[0];
       touch.startX = t.pageX;
       touch.startY = t.pageY;
-    }
+    };
 
-    function handleTouchMove(e) {
+    const handleTouchMove = (e) => {
       if (!listening) return;
       e.preventDefault();
-    }
+    };
 
     function handleTouchEnd(e) {
       if (!listening) return;
@@ -192,12 +214,36 @@ export default {
       handleDirection();
     }
 
+    document.addEventListener("wheel", handleWheel);
+    document.addEventListener("touchstart", handleTouchStart);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleTouchEnd);
     slideIn();
   },
 };
 </script>
 
 <style lang="scss" scoped>
+/* dots*/
+.dots {
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 2%;
+  li {
+    background: white;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 1rem;
+    transition: transform 300ms ease;
+    &.active {
+      transform: scale(1.8);
+      transition: transform 300ms ease;
+    }
+  }
+}
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap");
 

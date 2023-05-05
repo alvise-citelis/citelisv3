@@ -94,23 +94,67 @@ export default {
         onComplete: scrolling.enable,
         duration: 0.7,
       });
+      
+ 
+      //anim.play() && anim.restart();
+      if(anim){
+        let tl = gsap.timeline({
 
-      anim && anim.restart();
+        
+        onComplete:()=>{ console.log('tl completada');},
+        onStart:()=>{ console.log('tl start');},
+      })
+
+     
+      tl.from(section, {backgroundPositionY: "50%",duration: 0.7, onComplete:()=>{ console.log('back comple');},})
+      tl.from(section.querySelector("h2"), {yPercent: -150,duration: 0.7, onComplete:()=>{ console.log('title  comple');},},"<");
+
+      /* console.log('section',section);
+       const anim = gsap.from(section.querySelector("h2"), {
+          yPercent: -120,
+          duration: 0.7,
+        }) */
+        //anim && anim.restart()
+
+      }
     }
 
     sections.forEach((section, i) => {
-      const intoAnim = gsap.from(section.querySelector("h2"), {
+      /* const intoAnim = gsap.from(section.querySelector("h2"), {
         yPercent: -120,
         duration: 0.7,
         paused: true,
-      });
+      }); */
+      
+      /* const intoAnim2 = gsap.from(section, {
+        backgroundPositionY: "50%",
+        duration: 0.7,
+        paused: true,
+      }); */
+
+     /*  let tl = gsap.timeline({
+        paused:true,
+        defaults: {
+          // children inherit these defaults
+          duration: 0.7,
+          paused: true,
+        },
+        
+        onComplete:()=>{ console.log('tl completada');},
+        onStart:()=>{ console.log('tl start');},
+
+      }).from(section, {backgroundPositionY: "50%",duration: 0.7, onComplete:()=>{ console.log('back comple');},})
+        .from(section.querySelector("h2"), {yPercent: -120,duration: 0.7, onComplete:()=>{ console.log('title  comple');},},"<");
+ */
+
+      
 
       ScrollTrigger.create({
         trigger: section,
         start: "top bottom-=1",
         end: "bottom top+=1",
         markers: true,
-        onEnter: () => goToSection(section, intoAnim),
+        onEnter: () => goToSection(section, true),
         onEnterBack: () => goToSection(section),
       });
     });
@@ -160,6 +204,9 @@ export default {
     rgba(0, 0, 0, 0.6) 0%,
     rgba(0, 0, 0, 0.3) 100%
   );
+  section.hero-story {
+    background-size: cover;
+  }
   .first {
     background-image: $bg-gradient,
       url(https://images.unsplash.com/photo-1617478755490-e21232a5eeaf?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYxNzU1NjM5NA&ixlib=rb-1.2.1&q=75&w=1920);

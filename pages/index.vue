@@ -22,6 +22,9 @@ export default {
 </script>
 
 <style>
+body {
+  background-color: black;
+}
 .banner {
   height: 300px;
   position: relative;

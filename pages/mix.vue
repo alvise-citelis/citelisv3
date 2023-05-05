@@ -4,35 +4,45 @@ Sections animate in and out on scroll. Scroll up or down and the sections will w
  -->
   <div class="mix">
     <header class="flex-center">
-      <h3>Contenu du header</h3>
+      <h3>Esto sería el header</h3>
     </header>
-    <section
-      v-for="section in sectionss"
-      class="a"
-      data-section-fullscroll
-      :class="section.class"
-    >
-      <div class="flex-center">
-        <h2>{{ section.text }}</h2>
+    <div class="relative">
+      <section
+        v-for="section in sectionss"
+        class="a"
+        data-section-fullscroll
+        :class="section.class"
+      >
+        <div class="flex-center">
+          <h2>{{ section.text }}</h2>
+        </div>
+      </section>
+      <section data-section-fullscroll id="landing-page" class="">
+        <div class="flex-center">
+          <h2>Otra mas</h2>
+        </div>
+      </section>
+      <section id="landing-page" class="">
+        <div class="flex-center">
+          <h2>Sin scroll</h2>
+        </div>
+      </section>
+      <div class="dots">
+        <ul>
+          <li
+            v-for="(i, index) in sectionss"
+            :class="index == next ? 'active' : ''"
+          />
+        </ul>
       </div>
-    </section>
-    <section data-section-fullscroll id="landing-page" class="">
-      <div class="flex-center">
-        <h2>Otra mas</h2>
-      </div>
-    </section>
-    <section id="landing-page" class="">
-      <div class="flex-center">
-        <h2>Sin scroll</h2>
-      </div>
-    </section>
+    </div>
 
     <div class="">
       <h3>Contenido intermedio</h3>
     </div>
 
     <div class="containerr">
-      <h2 class="containerr__headline">Wanna see something neat?</h2>
+      <h2 class="containerr__headline">¿Quieres ver algo interesante?</h2>
     </div>
     <section class="containerr hero">
       <div class="hero__inner">
@@ -50,7 +60,7 @@ Sections animate in and out on scroll. Scroll up or down and the sections will w
       </div>
     </section>
     <footer class="containerr">
-      <h2 class="containerr__headline">That's pretty neat.</h2>
+      <h2 class="containerr__headline">Se ve cool ¿no?</h2>
     </footer>
   </div>
 </template>
@@ -72,6 +82,8 @@ export default {
         { class: "fourth", text: "SAnimation platformn" },
         { class: "fifth", text: "Keep scrolling" },
       ],
+      current: null,
+      next: 0,
     };
   },
   mounted() {
@@ -113,6 +125,7 @@ export default {
       if (!scrolling.enabled) {
         return;
       }
+      console.log("enter index", i);
 
       scrolling.disable();
       gsap.to(window, {
@@ -175,6 +188,27 @@ body {
   color: white;
 }
 .mix {
+  .dots {
+    z-index: 2;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 2%;
+    width: 50px;
+    li {
+      background: white;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 1rem;
+      transition: transform 300ms ease;
+      &.active {
+        transform: scale(1.8);
+        transition: transform 300ms ease;
+      }
+    }
+  }
+
   section,
   footer,
   header {

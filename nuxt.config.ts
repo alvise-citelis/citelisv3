@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     base: "/citelisv3/",
   },
   devServer: {
-    port: 3333,
+    port: 4444,
   },
   typescript: {
     shim: false,

@@ -94,28 +94,43 @@ export default {
         onComplete: scrolling.enable,
         duration: 0.7,
       });
-      
- 
+
       //anim.play() && anim.restart();
-      if(anim){
+      if (anim) {
         let tl = gsap.timeline({
+          onComplete: () => {
+            console.log("tl completada");
+          },
+          onStart: () => {
+            console.log("tl start");
+          },
+        });
 
-        
-        onComplete:()=>{ console.log('tl completada');},
-        onStart:()=>{ console.log('tl start');},
-      })
+        tl.from(section, {
+          backgroundPositionY: "50%",
+          duration: 0.7,
+          onComplete: () => {
+            console.log("back comple");
+          },
+        });
+        tl.from(
+          section.querySelector("h2"),
+          {
+            yPercent: -150,
+            duration: 0.7,
+            onComplete: () => {
+              console.log("title  comple");
+            },
+          },
+          "<"
+        );
 
-     
-      tl.from(section, {backgroundPositionY: "50%",duration: 0.7, onComplete:()=>{ console.log('back comple');},})
-      tl.from(section.querySelector("h2"), {yPercent: -150,duration: 0.7, onComplete:()=>{ console.log('title  comple');},},"<");
-
-      /* console.log('section',section);
+        /* console.log('section',section);
        const anim = gsap.from(section.querySelector("h2"), {
           yPercent: -120,
           duration: 0.7,
         }) */
         //anim && anim.restart()
-
       }
     }
 
@@ -125,14 +140,14 @@ export default {
         duration: 0.7,
         paused: true,
       }); */
-      
+
       /* const intoAnim2 = gsap.from(section, {
         backgroundPositionY: "50%",
         duration: 0.7,
         paused: true,
       }); */
 
-     /*  let tl = gsap.timeline({
+      /*  let tl = gsap.timeline({
         paused:true,
         defaults: {
           // children inherit these defaults
@@ -147,13 +162,10 @@ export default {
         .from(section.querySelector("h2"), {yPercent: -120,duration: 0.7, onComplete:()=>{ console.log('title  comple');},},"<");
  */
 
-      
-
       ScrollTrigger.create({
         trigger: section,
         start: "top bottom-=1",
         end: "bottom top+=1",
-        markers: true,
         onEnter: () => goToSection(section, true),
         onEnterBack: () => goToSection(section),
       });
